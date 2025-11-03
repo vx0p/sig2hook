@@ -9,6 +9,12 @@
 #include <ucontext.h>
 #include <unistd.h>
 
+#ifndef SIG2HOOK_INST
+#error "Define SIG2HOOK_INST via -DSIG2HOOK_INST=0xXXXXXXXX"
+#endif
+#define STR_HELPER(x) #x
+#define STR(x)        STR_HELPER(x)
+
 static const char CTOR_MSG[] = "== [libsig2hook] loaded ==\n";
 static const char DTOR_MSG[] = "== [libsig2hook] unloading ==\n";
 
@@ -16,7 +22,7 @@ void patched_asm(void) {
     int a = 777777;
     int b = 7000000;
 
-    asm volatile("sub sp, sp, #0x10");
+    asm volatile(".inst " STR(SIG2HOOK_INST) "\n");
 
     asm volatile(
         "mov x0, %x[x0]\n"
