@@ -27,7 +27,7 @@ echo "add先頭命令(.inst): 0x$FIRST_WORD"
 
 # ill_targetに不正な命令(0x00000000)を書き込む
 PAYLOAD='\x00\x00\x00\x00'
-printf "$PAYLOAD" | dd of=ill_target \
+printf '%b' "$PAYLOAD" | dd of=ill_target \
 	seek="$OFFSET_DEC" \
 	bs=1 \
 	count=4 \
@@ -39,10 +39,10 @@ echo "before patch"
 ./ill_target || rm -f qemu*.core
 
 # ライブラリをビルド（命令はマクロで注入）
-gcc -shared -fPIC -Wall -Wextra -O2 -DSIG2HOOK_INST=0x$FIRST_WORD sig2hook.c -o libsig2hook.so
+gcc -shared -fPIC -Wall -Wextra -O2 -DSIG2HOOK_INST=0x"$FIRST_WORD" sig2hook.c -o libsig2hook.so
 
 # 実行ファイルにライブラリを追加
-patchelf --set-rpath '$ORIGIN' ./ill_target
+patchelf --set-rpath "\$ORIGIN" ./ill_target
 patchelf --add-needed libsig2hook.so ./ill_target
 
 echo "after patch"

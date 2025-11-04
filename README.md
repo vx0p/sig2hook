@@ -2,20 +2,16 @@
 
 [`sigaction`](https://linuxjm.sourceforge.io/html/LDP_man-pages/man2/sigaction.2.html)を使用した関数 hook
 
-## 環境
+## 環境準備
 
 - [Docker](https://docs.docker.com/engine/install/ubuntu/)
+- Ubuntu 24.04.3 LTS (Noble Numbat)
 - ARM64
 
 ```bash
 docker run --privileged --rm tonistiigi/binfmt --install arm64
-docker run --platform linux/arm64 -it ubuntu
-```
-
-## 準備
-
-```bash
-apt-get update && apt-get install -y patchelf build-essential
+docker build --platform linux/arm64 -t sig2hook:latest .
+docker run --platform linux/arm64 -it --rm sig2hook:latest bash
 ```
 
 ## 実行 - [sig2hook.sh](./sig2hook.sh)
