@@ -5,7 +5,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get -q update \
     && apt-get -q install -y --no-install-recommends \
     build-essential \
-    binutils \ 
+    binutils \
     patchelf \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*

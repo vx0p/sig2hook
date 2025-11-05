@@ -2,19 +2,40 @@
 
 [`sigaction`](https://linuxjm.sourceforge.io/html/LDP_man-pages/man2/sigaction.2.html)を使用した関数 hook
 
-## 環境準備
+## 環境
 
-- [Docker](https://docs.docker.com/engine/install/ubuntu/)
-- Ubuntu 24.04.3 LTS (Noble Numbat)
-- ARM64
+arm64 向けの Docker コンテナを実行するための準備
 
 ```bash
 docker run --privileged --rm tonistiigi/binfmt --install arm64
-docker build --platform linux/arm64 -t sig2hook:latest .
-docker run --platform linux/arm64 -it --rm sig2hook:latest bash
 ```
 
-## 実行 - [sig2hook.sh](./sig2hook.sh)
+### ビルド
+
+ビルド済みのイメージ`ghcr.io/viaemet0/sig2hook:latest`を使用する場合は不要です。
+
+- [Docker](https://docs.docker.com/engine/install/ubuntu/)
+  - Ubuntu 24.04.3 LTS (Noble Numbat)
+  - ARM64
+
+```bash
+git clone https://github.com/viaemet0/sig2hook.git
+cd sig2hook
+docker build --platform linux/arm64 -t sig2hook:latest .
+```
+
+## 実行
+
+```bash
+docker run --platform linux/arm64 -it --rm sig2hook:latest bash
+# or
+docker run --platform linux/arm64 -it --rm ghcr.io/viaemet0/sig2hook:latest bash
+
+# apt や vim を使用するなら
+# docker run --platform linux/arm64 -it --rm --user root -v "$PWD":/sig2hook -w /sig2hook --entrypoint bash sig2hook:latest
+```
+
+### [sig2hook.sh](./sig2hook.sh)
 
 ```bash
 ./sig2hook.sh
@@ -50,13 +71,11 @@ write: finish
 
 </details>
 
-## 流れ
+### 処理の流れ - [sig2hook.sh](./sig2hook.sh)
 
 - 処理を埋め込みたい箇所に、存在しない命令（例えば、`0x00000000`）を書き込むと、通常であればプログラムがクラッシュ
 - `sigaction`で捕捉することでライブラリ`libsig2hook.so`の関数に強制的にジャンプ
 - コンテキストのレジスタの値を調整することで、実行可能ファイル`target`に処理を戻す
-
-## その他
 
 ### [patch.sh](./patch.sh)
 
