@@ -12,14 +12,14 @@ docker run --privileged --rm tonistiigi/binfmt --install arm64
 
 ### ビルド
 
-ビルド済みのイメージ`ghcr.io/viaemet0/sig2hook:latest`を使用する場合は不要です。
+ビルド済みのイメージ`ghcr.io/vx0p/sig2hook:latest`を使用する場合は不要です。
 
 - [Docker](https://docs.docker.com/engine/install/ubuntu/)
   - Ubuntu 24.04.3 LTS (Noble Numbat)
   - ARM64
 
 ```bash
-git clone https://github.com/viaemet0/sig2hook.git
+git clone https://github.com/vx0p/sig2hook.git
 cd sig2hook
 docker build --platform linux/arm64 -t sig2hook:latest .
 ```
@@ -29,7 +29,7 @@ docker build --platform linux/arm64 -t sig2hook:latest .
 ```bash
 docker run --platform linux/arm64 -it --rm sig2hook:latest bash
 # or
-docker run --platform linux/arm64 -it --rm ghcr.io/viaemet0/sig2hook:latest bash
+docker run --platform linux/arm64 -it --rm ghcr.io/vx0p/sig2hook:latest bash
 
 # apt や vim を使用するなら
 # docker run --platform linux/arm64 -it --rm --user root -v "$PWD":/sig2hook -w /sig2hook --entrypoint bash sig2hook:latest
